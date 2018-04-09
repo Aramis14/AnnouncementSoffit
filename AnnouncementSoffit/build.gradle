@@ -3,6 +3,7 @@ buildscript {
 		springBootVersion = '1.5.12.BUILD-SNAPSHOT'
 	}
 	repositories {
+		mavenLocal()
 		mavenCentral()
 		maven { url "https://repo.spring.io/snapshot" }
 		maven { url "https://repo.spring.io/milestone" }
@@ -32,8 +33,12 @@ configurations {
 }
 
 dependencies {
+	compile('org.jasig.portal:uPortal-soffit-renderer:5.0.6')
 	compile('org.springframework.boot:spring-boot-starter-cache')
 	compile('org.springframework.boot:spring-boot-starter-web')
+
+	providedRuntime('org.apache.tomcat.embed:tomcat-embed-jasper')
 	providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
+	
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
