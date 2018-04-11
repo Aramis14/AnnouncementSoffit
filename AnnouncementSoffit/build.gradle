@@ -36,9 +36,13 @@ dependencies {
 	compile('org.jasig.portal:uPortal-soffit-renderer:5.0.6')
 	compile('org.springframework.boot:spring-boot-starter-cache')
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('com.fasterxml.jackson.core:jackson-core:2.9.5')
+	compile('com.fasterxml.jackson.core:jackson-annotations:2.9.5')
+	compile('com.fasterxml.jackson.core:jackson-databind:2.9.5')
 
 	providedRuntime('org.apache.tomcat.embed:tomcat-embed-jasper')
 	providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
+
 	
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
