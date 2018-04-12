@@ -1,4 +1,5 @@
 .gradle
+.project
 /build/
 !gradle/wrapper/gradle-wrapper.jar
 
@@ -24,3 +25,16 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+/.metadata/
+
+/.metadata/
+/.recommenders/
+
+
+### VS Code ###
+/.vscode/
+
+/Servers/
+/src/bin/
+/bin/
+/RemoteSystemsTempFiles/
