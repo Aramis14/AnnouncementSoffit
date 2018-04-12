@@ -1,4 +1,4 @@
-package asu.asupoly.ser401.AnnouncementSoffit;
+package asu.asupoly.ser401.announcement_soffit;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
