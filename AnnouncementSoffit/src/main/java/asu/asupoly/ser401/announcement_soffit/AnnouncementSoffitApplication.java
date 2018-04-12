@@ -1,4 +1,4 @@
-package asu.asupoly.ser401.AnnouncementSoffit;
+package asu.asupoly.ser401.announcement_soffit;
 
 import org.apereo.portal.soffit.renderer.SoffitApplication;
 import org.springframework.boot.SpringApplication;
