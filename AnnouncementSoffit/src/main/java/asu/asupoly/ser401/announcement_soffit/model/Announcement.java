@@ -1,6 +1,5 @@
-package asu.asupoly.ser401.AnnouncementSoffit.model;
+package asu.asupoly.ser401.announcement_soffit.model;
 
-import java.util.List;
 import java.util.Date;
 import java.util.Set;
 //import com.fasterxml.jackson.*;
