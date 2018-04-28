@@ -18,36 +18,55 @@
  */
 package org.jasig.portlet.announcements.service;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.jasig.portlet.announcements.model.Announcement;
 import org.jasig.portlet.announcements.model.Topic;
 import org.jasig.portlet.announcements.model.TopicSubscription;
 import org.jasig.portlet.announcements.service.dummy.PortletException;
 import org.jasig.portlet.announcements.service.dummy.PortletRequest;
+import org.jasig.portlet.announcements.repository.AnnouncementRepository;
+import org.jasig.portlet.announcements.repository.TopicRepository;
+import org.jasig.portlet.announcements.repository.TopicSubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
+import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.PersistenceContext;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static org.springframework.orm.hibernate5.SessionFactoryUtils.convertHibernateAccessException;
-
 /**
  * @author Erik A. Olsson (eolsson@uci.edu)
  */
-public class HibernateAnnouncementService extends HibernateDaoSupport
-        implements IAnnouncementService {
+@Service
+@SuppressWarnings("unused")
+public class HibernateAnnouncementService implements IAnnouncementService {
 
     private static Log log = LogFactory.getLog(HibernateAnnouncementService.class);
 
+    private TopicRepository topicRepository;
+
+    private AnnouncementRepository announcementRepository;
+
+    private TopicSubscriptionRepository topicSubscriptionRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Autowired
-    private SessionFactory sessionFactory;
+    public HibernateAnnouncementService(TopicRepository topicRepository,
+                                        AnnouncementRepository announcementRepository,
+                                        TopicSubscriptionRepository topicSubscriptionRepository,
+                                        EntityManager entityManager) {
+        this.topicRepository = topicRepository;
+        this.announcementRepository = announcementRepository;
+        this.topicSubscriptionRepository = topicSubscriptionRepository;
+        this.entityManager = entityManager;
+    }
 
     /**
      * Fetch all the Topics from the database and return them as a list
@@ -56,93 +75,47 @@ public class HibernateAnnouncementService extends HibernateDaoSupport
      */
     @SuppressWarnings("unchecked")
     public List<Topic> getAllTopics() {
-
-        List<Topic> result;
-
-        try {
-            result = (List<Topic>) getHibernateTemplate().find("from Topic");
-        } catch (HibernateException ex) {
-            throw convertHibernateAccessException(ex);
-        }
-
-        return result;
+        return Lists.newArrayList(topicRepository.findAll());
     }
 
     @SuppressWarnings("unchecked")
     public Topic getEmergencyTopic() {
-        Topic t = null;
-        List<Topic> result;
-
-        try {
-            result = (List<Topic>) getHibernateTemplate().find("from Topic where SUB_METHOD = 4");
-            t = result.get(0);
-        } catch (HibernateException ex) {
-            throw convertHibernateAccessException(ex);
-        }
-
-        return t;
+        return topicRepository.getEmergencyTopic()
+                .orElseThrow(() -> new EntityNotFoundException("Emergency topic not found"));
     }
 
     public void addOrSaveTopic(Topic topic) {
-        try {
-            log.debug(
-                    "Insert or save topic: [topicId: "
-                            + (topic.getId() != null ? topic.getId().toString() : "NEW")
-                            + "]");
-            getHibernateTemplate().saveOrUpdate(topic);
-            getHibernateTemplate().flush();
-        } catch (HibernateException ex) {
-            throw convertHibernateAccessException(ex);
-        }
+        log.debug("Insert or save topic: [topicId: "
+                + (topic.getId() != null ? topic.getId().toString() : "NEW")
+                + "]");
+        topicRepository.save(topic);
     }
 
     public void persistTopic(Topic topic) {
-        try {
-            log.debug("Persisting topic: [topicId: " + topic.getId().toString() + "]");
-            getHibernateTemplate().persist(topic);
-            getHibernateTemplate().flush();
-        } catch (HibernateException ex) {
-            throw convertHibernateAccessException(ex);
-        }
+        log.debug("Persisting topic: [topicId: " + topic.getId().toString() + "]");
+        entityManager.persist(topic);
     }
 
     public void mergeTopic(Topic topic) {
-        try {
-            log.debug("Merging topic: [topicId: " + topic.getId().toString() + "]");
-            getHibernateTemplate().merge(topic);
-            getHibernateTemplate().flush();
-        } catch (HibernateException ex) {
-            throw convertHibernateAccessException(ex);
-        }
+        log.debug("Merging topic: [topicId: " + topic.getId().toString() + "]");
+        entityManager.merge(topic);
     }
 
     public void addOrSaveAnnouncement(Announcement ann) {
-        try {
-            if (ann.getCreated() == null) {
-                ann.setCreated(new Date());
-            }
-            log.debug(
-                    "Insert or save announcement: [annId: "
-                            + (ann.getId() != null ? ann.getId().toString() : "NEW")
-                            + "]");
-            getHibernateTemplate().saveOrUpdate(ann);
-            getHibernateTemplate().flush();
-        } catch (HibernateException ex) {
-            throw convertHibernateAccessException(ex);
+        if (ann.getCreated() == null) {
+            ann.setCreated(new Date());
         }
+        log.debug("Insert or save announcement: [annId: "
+                + (ann.getId() != null ? ann.getId().toString() : "NEW")
+                + "]");
+        announcementRepository.save(ann);
     }
 
     public void mergeAnnouncement(Announcement ann) {
-        try {
-            log.debug(
-                    "Merge announcement: [annId: "
-                            + (ann.getId() != null ? ann.getId().toString() : "NEW")
-                            + "]");
-            getHibernateTemplate().merge(ann);
-            getHibernateTemplate().flush();
-        } catch (HibernateException ex) {
-            throw convertHibernateAccessException(ex);
-        }
+        log.debug("Merge announcement: [annId: "
+                + (ann.getId() != null ? ann.getId().toString() : "NEW")
+                + "]");
+        entityManager.merge(ann);
     }
 
     /**
@@ -154,77 +127,48 @@ public class HibernateAnnouncementService extends HibernateDaoSupport
      */
     @SuppressWarnings("unchecked")
     public Topic getTopic(Long id) throws PortletException {
-        List<Topic> result;
 
         if (id == null) {
             throw new PortletException("Programming error: getTopic called with null parameter");
         }
 
-        try {
-            result =
-                    (List<Topic>)
-                            getHibernateTemplate().find("from Topic where id = '" + id.toString() + "'");
-            if (result.size() != 1) {
-                throw new PortletException("The requested topic [" + id.toString() + "] does not exist.");
-            }
-        } catch (HibernateException ex) {
-            throw convertHibernateAccessException(ex);
-        }
-
-        return result.get(0);
+        return topicRepository.findById(id)
+                .orElseThrow(() ->
+                        new PortletException("The requested topic [" + id.toString() + "] does not exist."));
     }
 
     @SuppressWarnings("unchecked")
     public Announcement getAnnouncement(Long id) throws PortletException {
-        List<Announcement> result = null;
 
         if (id == null) {
             throw new PortletException("Programming error: getAnnouncement called with null parameter");
         }
 
-        try {
-            result =
-                    (List<Announcement>)
-                            getHibernateTemplate().find("from Announcement where id = '" + id.toString() + "'");
-            if (result.size() != 1) {
-                throw new PortletException(
-                        "The requested announcement [" + id.toString() + "] does not exist.");
-            }
-        } catch (HibernateException ex) {
-            throw convertHibernateAccessException(ex);
-        }
-
-        return result.get(0);
+        return announcementRepository.findById(id)
+                .orElseThrow(() ->
+                        new PortletException("The requested announcement [" + id.toString() + "] does not exist."));
     }
 
     @SuppressWarnings("unchecked")
     public void deleteAnnouncementsPastCurrentTime() {
-        try {
-            int count = sessionFactory.getCurrentSession()
-                    .createQuery("delete from Announcement where END_DISPLAY < current_timestamp()")
-                    .executeUpdate();
-            log.info("Deleted " + count + " expired announcements that stopped displaying prior to now.");
-        } catch (HibernateException ex) {
-            throw convertHibernateAccessException(ex);
-        }
+        int count = entityManager
+                .createQuery("delete from Announcement where END_DISPLAY < current_timestamp()")
+                .executeUpdate();
+        log.info("Deleted " + count + " expired announcements that stopped displaying prior to now.");
     }
 
     @SuppressWarnings("unchecked")
     public void deleteAnnouncementsPastExpirationThreshold(int numDays) {
-        try {
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DATE, (numDays * -1));
-            int count = sessionFactory.getCurrentSession()
-                    .createQuery("delete from Announcement where END_DISPLAY < :date")
-                    .setParameter("date", cal)
-                    .executeUpdate();
-            log.info("Deleted "
-                    + count
-                    + " expired announcements that stopped displaying prior to "
-                    + cal.getTime());
-        } catch (HibernateException ex) {
-            throw convertHibernateAccessException(ex);
-        }
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, (numDays * -1));
+        int count = entityManager
+                .createQuery("delete from Announcement where END_DISPLAY < :date")
+                .setParameter("date", cal)
+                .executeUpdate();
+        log.info("Deleted "
+                + count
+                + " expired announcements that stopped displaying prior to "
+                + cal.getTime());
     }
 
     /**
@@ -233,83 +177,34 @@ public class HibernateAnnouncementService extends HibernateDaoSupport
      * @throws PortletException
      */
     @SuppressWarnings("unchecked")
-    public List<TopicSubscription> getTopicSubscriptionFor(PortletRequest request)
-            throws PortletException {
-        List<TopicSubscription> result = null;
-
-        try {
-            result =
-                    (List<TopicSubscription>)
-                            getHibernateTemplate()
-                                    .find(
-                                            "from TopicSubscription where OWNER_ID = '" + request.getRemoteUser() + "'");
-        } catch (HibernateException ex) {
-            throw convertHibernateAccessException(ex);
-        }
-
-        return result;
+    public List<TopicSubscription> getTopicSubscriptionFor(PortletRequest request) {
+        return topicSubscriptionRepository.getTopicSubscriptionFor(request.getRemoteUser());
     }
 
     public void addOrSaveTopicSubscription(List<TopicSubscription> subs) {
-
-        try {
-            for (TopicSubscription ts : subs) {
-                getHibernateTemplate().saveOrUpdate(ts);
-            }
-            getHibernateTemplate().flush();
-        } catch (HibernateException ex) {
-            throw convertHibernateAccessException(ex);
-        }
+        topicSubscriptionRepository.saveAll(subs);
     }
 
     public void persistTopicSubscription(List<TopicSubscription> subs) {
-
-        try {
-            for (TopicSubscription ts : subs) {
-                getHibernateTemplate().persist(ts);
-            }
-            getHibernateTemplate().flush();
-        } catch (HibernateException ex) {
-            throw convertHibernateAccessException(ex);
-        }
+        subs.forEach(ts -> entityManager.persist(ts));
     }
 
     @SuppressWarnings("unchecked")
     public void deleteTopic(Topic topic) {
-        try {
-            // any topic subscriptions with this id should be trashed first (since the topic is not aware of
-            // what topic subscriptions exist for it)
-            Long topicId = topic.getId();
-            List<TopicSubscription> result =
-                    (List<TopicSubscription>)
-                            getHibernateTemplate()
-                                    .find("from TopicSubscription where TOPIC_ID = " + topicId.toString());
-            for (TopicSubscription ts : result) {
-                getHibernateTemplate().delete(ts);
-            }
-            // then delete the topic itself (announcements get deleted by hibernate)
-            getHibernateTemplate().delete(topic);
-            getHibernateTemplate().flush();
-        } catch (HibernateException ex) {
-            throw convertHibernateAccessException(ex);
-        }
+        // any topic subscriptions with this id should be trashed first (since the topic is not aware of
+        // what topic subscriptions exist for it)
+        List<TopicSubscription> result =
+                topicSubscriptionRepository.getTopicSubscriptionByTopicId(topic.getId());
+        result.forEach(ts -> topicSubscriptionRepository.delete(ts));
+        // then delete the topic itself (announcements get deleted by hibernate)
+        topicRepository.delete(topic);
     }
 
     public void deleteAnnouncement(Announcement ann) {
-        try {
-            getHibernateTemplate().delete(ann);
-            getHibernateTemplate().flush();
-        } catch (HibernateException ex) {
-            throw convertHibernateAccessException(ex);
-        }
+        announcementRepository.delete(ann);
     }
 
     public void deleteTopicSubscription(TopicSubscription sub) {
-        try {
-            getHibernateTemplate().delete(sub);
-            getHibernateTemplate().flush();
-        } catch (HibernateException ex) {
-            throw convertHibernateAccessException(ex);
-        }
+        topicSubscriptionRepository.delete(sub);
     }
 }
