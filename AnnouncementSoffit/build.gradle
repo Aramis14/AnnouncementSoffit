@@ -1,12 +1,9 @@
 buildscript {
 	ext {
-		springBootVersion = '1.5.9.RELEASE'
+		springBootVersion = '2.0.1.RELEASE'
 	}
 	repositories {
-		mavenLocal()
 		mavenCentral()
-		maven { url "https://repo.spring.io/snapshot" }
-		maven { url "https://repo.spring.io/milestone" }
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -16,15 +13,16 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'eclipse-wtp'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 apply plugin: 'war'
 
-group = 'asu.asupoly.ser401'
+group = 'org.jasig.portlet'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
-	mavenLocal()
-	mavenCentral()
+    mavenLocal()
+    mavenCentral()
 }
 
 configurations {
@@ -32,16 +30,10 @@ configurations {
 }
 
 dependencies {
-	compile('org.jasig.portal:uPortal-soffit-renderer:5.0.5')
+    compile('org.jasig.portal:uPortal-soffit-renderer:5.0.0')
+    providedRuntime('org.apache.tomcat.embed:tomcat-embed-jasper')
 	compile('org.springframework.boot:spring-boot-starter-cache')
 	compile('org.springframework.boot:spring-boot-starter-web')
-	compile('com.fasterxml.jackson.core:jackson-core:2.9.5')
-	compile('com.fasterxml.jackson.core:jackson-annotations:2.9.5')
-	compile('com.fasterxml.jackson.core:jackson-databind:2.9.5')
-
-	providedRuntime('org.apache.tomcat.embed:tomcat-embed-jasper')
 	providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
-
-	
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
