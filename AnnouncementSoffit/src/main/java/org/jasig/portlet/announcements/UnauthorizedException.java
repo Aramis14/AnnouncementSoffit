@@ -16,28 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.portlet.announcements.service;
-
-import org.jasig.portlet.announcements.model.AnnouncementConfiguration;
-import org.jasig.portlet.announcements.service.dummy.ActionRequest;
-import org.jasig.portlet.announcements.service.dummy.PortletRequest;
+package org.jasig.portlet.announcements;
 
 /**
- * Provides access to the config mode settings for the Announcement portlet
- *
- * @author Chris Waymire (chris@waymire.net)
+ * @author Erik A. Olsson (eolsson@uci.edu)
+ *     <p>$LastChangedBy$ $LastChangedDate$
  */
-public interface IConfigService {
+public class UnauthorizedException extends SecurityException {
 
-  /**
-   * @param request
-   * @return
-   */
-  public AnnouncementConfiguration getConfiguration(PortletRequest request);
+  private static final long serialVersionUID = 6700248976586222636L;
 
-  /**
-   * @param request
-   * @param config
-   */
-  public void saveConfiguration(ActionRequest request, AnnouncementConfiguration config);
+  public UnauthorizedException() {
+    super();
+  }
+
+  public UnauthorizedException(String m) {
+    super(m);
+  }
 }

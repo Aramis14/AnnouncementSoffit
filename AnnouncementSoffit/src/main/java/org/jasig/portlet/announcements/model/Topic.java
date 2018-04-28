@@ -18,18 +18,12 @@
  */
 package org.jasig.portlet.announcements.model;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
-import org.apache.log4j.Logger;
 import org.jasig.portlet.announcements.xml.Namespaces;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.xml.bind.annotation.*;
+import java.util.*;
 
 /**
  * @author Erik A. Olsson (eolsson@uci.edu)
@@ -46,7 +40,7 @@ public class Topic {
       3; /* ...Not pushed to anybody, but target audience members can subscribe (pull) if they want to */
   public static final int EMERGENCY = 4; /* A topic that supercedes all other topics */
 
-  private static final org.apache.log4j.Logger logger = Logger.getLogger(Topic.class);
+  private static final Logger logger = LoggerFactory.getLogger(Topic.class);
 
   private Set<Announcement> announcements;
 

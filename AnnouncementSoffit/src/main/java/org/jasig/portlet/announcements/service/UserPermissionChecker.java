@@ -18,13 +18,14 @@
  */
 package org.jasig.portlet.announcements.service;
 
-import java.util.Set;
-import javax.portlet.PortletRequest;
 import org.jasig.portlet.announcements.UnauthorizedException;
 import org.jasig.portlet.announcements.model.Topic;
 import org.jasig.portlet.announcements.model.UserRoles;
+import org.jasig.portlet.announcements.service.dummy.PortletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Set;
 
 /**
  * Utility class that can be used statically to check role membership of a Topic, or when

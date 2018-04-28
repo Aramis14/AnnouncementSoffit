@@ -16,28 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.portlet.announcements.service;
-
-import org.jasig.portlet.announcements.model.AnnouncementConfiguration;
-import org.jasig.portlet.announcements.service.dummy.ActionRequest;
-import org.jasig.portlet.announcements.service.dummy.PortletRequest;
+package org.jasig.portlet.announcements.xml;
 
 /**
- * Provides access to the config mode settings for the Announcement portlet
+ * Namespaces to use for XML Schema generation and JAXB
  *
- * @author Chris Waymire (chris@waymire.net)
+ * @author James Wennmacher, jwennmacher@unicon.net
  */
-public interface IConfigService {
+public interface Namespaces {
 
-  /**
-   * @param request
-   * @return
-   */
-  public AnnouncementConfiguration getConfiguration(PortletRequest request);
-
-  /**
-   * @param request
-   * @param config
-   */
-  public void saveConfiguration(ActionRequest request, AnnouncementConfiguration config);
+  public static final String TOPIC_NAMESPACE = "http://www.uPortal.org/schema/announcement/topic";
+  public static final String TOPIC_SUBSCRIPTION_NAMESPACE =
+      "http://www.uPortal.org/schema/announcement/topicSubscription";
+  public static final String ANNOUNCEMENT_NAMESPACE =
+      "http://www.uPortal.org/schema/announcement/announcement";
 }
