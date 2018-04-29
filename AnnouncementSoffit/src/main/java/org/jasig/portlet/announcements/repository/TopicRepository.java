@@ -10,4 +10,6 @@ public interface TopicRepository extends CrudRepository<Topic, Long> {
 
     @Query("select t from Topic t where t.subscriptionMethod = 4")
     Optional<Topic> getEmergencyTopic();
+
+    Optional<Topic> findById(Long id);
 }

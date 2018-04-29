@@ -24,8 +24,6 @@ import org.apache.commons.logging.LogFactory;
 import org.jasig.portlet.announcements.model.Announcement;
 import org.jasig.portlet.announcements.model.Topic;
 import org.jasig.portlet.announcements.model.TopicSubscription;
-import org.jasig.portlet.announcements.service.dummy.PortletException;
-import org.jasig.portlet.announcements.service.dummy.PortletRequest;
 import org.jasig.portlet.announcements.repository.AnnouncementRepository;
 import org.jasig.portlet.announcements.repository.TopicRepository;
 import org.jasig.portlet.announcements.repository.TopicSubscriptionRepository;
@@ -35,6 +33,8 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
+import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -182,7 +182,7 @@ public class HibernateAnnouncementService implements IAnnouncementService {
     }
 
     public void addOrSaveTopicSubscription(List<TopicSubscription> subs) {
-        topicSubscriptionRepository.saveAll(subs);
+        topicSubscriptionRepository.save(subs);
     }
 
     public void persistTopicSubscription(List<TopicSubscription> subs) {

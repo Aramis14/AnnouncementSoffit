@@ -19,10 +19,10 @@
 package org.jasig.portlet.announcements.service;
 
 import org.jasig.portlet.announcements.model.TopicSubscription;
-import org.jasig.portlet.announcements.service.dummy.PortletException;
-import org.jasig.portlet.announcements.service.dummy.PortletRequest;
-import org.jasig.portlet.announcements.service.dummy.RenderRequest;
 
+import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
+import javax.portlet.RenderRequest;
 import java.util.List;
 
 /**

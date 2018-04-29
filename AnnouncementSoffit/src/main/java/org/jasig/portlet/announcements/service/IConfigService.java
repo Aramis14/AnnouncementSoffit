@@ -19,8 +19,9 @@
 package org.jasig.portlet.announcements.service;
 
 import org.jasig.portlet.announcements.model.AnnouncementConfiguration;
-import org.jasig.portlet.announcements.service.dummy.ActionRequest;
-import org.jasig.portlet.announcements.service.dummy.PortletRequest;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.PortletRequest;
 
 /**
  * Provides access to the config mode settings for the Announcement portlet

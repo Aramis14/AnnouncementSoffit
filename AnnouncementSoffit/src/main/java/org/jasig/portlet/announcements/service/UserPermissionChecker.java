@@ -21,10 +21,10 @@ package org.jasig.portlet.announcements.service;
 import org.jasig.portlet.announcements.UnauthorizedException;
 import org.jasig.portlet.announcements.model.Topic;
 import org.jasig.portlet.announcements.model.UserRoles;
-import org.jasig.portlet.announcements.service.dummy.PortletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.portlet.PortletRequest;
 import java.util.Set;
 
 /**

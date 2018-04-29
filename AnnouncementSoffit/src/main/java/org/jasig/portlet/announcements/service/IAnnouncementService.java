@@ -21,9 +21,9 @@ package org.jasig.portlet.announcements.service;
 import org.jasig.portlet.announcements.model.Announcement;
 import org.jasig.portlet.announcements.model.Topic;
 import org.jasig.portlet.announcements.model.TopicSubscription;
-import org.jasig.portlet.announcements.service.dummy.PortletException;
-import org.jasig.portlet.announcements.service.dummy.PortletRequest;
 
+import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
 import java.util.List;
 
 /**

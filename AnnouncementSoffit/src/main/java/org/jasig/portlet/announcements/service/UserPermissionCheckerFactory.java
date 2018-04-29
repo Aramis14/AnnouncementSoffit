@@ -19,7 +19,6 @@
 package org.jasig.portlet.announcements.service;
 
 import org.jasig.portlet.announcements.model.Topic;
-import org.jasig.portlet.announcements.service.dummy.PortletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanCreationException;
@@ -28,6 +27,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Component;
+
+import javax.portlet.PortletRequest;
 
 @Component
 public class UserPermissionCheckerFactory implements InitializingBean {

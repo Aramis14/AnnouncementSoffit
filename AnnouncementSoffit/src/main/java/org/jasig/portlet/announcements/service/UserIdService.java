@@ -19,12 +19,12 @@
 package org.jasig.portlet.announcements.service;
 
 import org.jasig.portlet.announcements.model.Role;
-import org.jasig.portlet.announcements.service.dummy.PortletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.PostConstruct;
+import javax.portlet.PortletRequest;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
