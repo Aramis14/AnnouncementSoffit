@@ -43,9 +43,9 @@
         <param-value>org.jasig.portlet.announcements.AnnouncementsApplication</param-value>
     </context-param>
 
-    <!--<listener>
+    <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener> -->
+    </listener>
 
     <servlet>
         <servlet-name>ViewRendererServlet</servlet-name>
@@ -62,7 +62,7 @@
         </init-param>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>org.jasig.portlet.announcements.mvc.servlet</param-value>
+            <param-value>org.jasig.portlet.announcements.mvc.config.WebMvcConfig</param-value>
         </init-param>
     </servlet>
 

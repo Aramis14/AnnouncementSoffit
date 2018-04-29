@@ -26,6 +26,7 @@ import org.jasig.portlet.notice.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -81,7 +82,7 @@ public class AnnouncementsViewController {
 
   @Autowired private final IAnnouncementService announcementService = null;
 
-  @Autowired private EhCacheCacheManager cm = null;
+  @Autowired private CacheManager cm = null;
 
   @Autowired(required = true)
   private IViewNameSelector viewNameSelector;

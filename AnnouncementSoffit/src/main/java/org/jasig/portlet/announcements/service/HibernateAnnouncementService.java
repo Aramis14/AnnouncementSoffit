@@ -35,6 +35,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
+import javax.transaction.Transactional;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -43,6 +44,7 @@ import java.util.List;
  * @author Erik A. Olsson (eolsson@uci.edu)
  */
 @Service
+@Transactional
 @SuppressWarnings("unused")
 public class HibernateAnnouncementService implements IAnnouncementService {
 
