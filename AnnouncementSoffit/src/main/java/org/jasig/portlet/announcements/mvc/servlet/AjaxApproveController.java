@@ -35,6 +35,7 @@ import java.util.Date;
  * portlet via AJaX.
  */
 @Controller("ajaxApproveController")
+@RequestMapping("ajaxApprove")
 public class AjaxApproveController {
 
     private static final int STATUS_SCHEDULED = 0;

@@ -50,6 +50,7 @@ import java.util.Set;
  * Provides the current content of a topic in RSS format, if the topic permits it.
  */
 @Controller("rssFeedController")
+@RequestMapping("getRssFeed")
 public class RssFeedController {
 
     private static final String CONTENT_TYPE = "application/rss+xml";
