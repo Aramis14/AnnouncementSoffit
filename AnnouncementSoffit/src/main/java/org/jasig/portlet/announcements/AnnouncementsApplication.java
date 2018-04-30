@@ -6,6 +6,8 @@ import org.jasig.portlet.announcements.model.Topic;
 import org.jasig.portlet.announcements.mvc.IViewNameSelector;
 import org.jasig.portlet.announcements.mvc.UserAgentViewNameSelector;
 import org.jasig.portlet.announcements.service.AnnouncementCleanupThread;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,12 +18,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.hibernate5.support.OpenSessionInViewInterceptor;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -40,14 +41,13 @@ import java.util.Arrays;
                 pattern = "org.jasig.portlet.announcements.mvc.*"))
 public class AnnouncementsApplication extends WebMvcConfigurerAdapter {
 
+    private static final Logger log = LoggerFactory.getLogger(AnnouncementsApplication.class);
+
     @Autowired
     private Environment env;
 
     @Autowired
     private EntityManagerFactory entityManagerFactory;
-
-    @Autowired
-    private ContentNegotiationManager contentNegotiationManager;
 
     public static void main(String[] args) {
         ApplicationContext context = SpringApplication.run(AnnouncementsApplication.class, args);
@@ -60,7 +60,7 @@ public class AnnouncementsApplication extends WebMvcConfigurerAdapter {
 
     @Bean
     public MessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasenames("i18n/messages", "i18n/validation");
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
@@ -82,17 +82,6 @@ public class AnnouncementsApplication extends WebMvcConfigurerAdapter {
         interceptor.setSessionFactory(entityManagerFactory.unwrap(SessionFactory.class));
         return interceptor;
     }
-
-    /** @Bean
-    public SimpleMappingExceptionResolver defaultExceptionHandler() {
-        SimpleMappingExceptionResolver resolver = new SimpleMappingExceptionResolver();
-        Properties errorMaps = new Properties();
-        errorMaps.setProperty("org.jasig.portlet.announcements.UnauthorizedException", "errorPermission");
-        errorMaps.setProperty("java.lang.Exception", "error");
-        resolver.setExceptionMappings(errorMaps);
-        resolver.setDefaultErrorView("error");
-        return resolver;
-    } */
 
     @Bean(name = "emergencyTopic")
     public Topic getEmergencyTopic() {
